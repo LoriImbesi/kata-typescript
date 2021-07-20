@@ -1,8 +1,4 @@
-export class HelloTypescript {
-    constructor(private greetingMessage = "TS says hello, default message :)") {
-    }
-
-    sayHello() {
-        console.log(this.greetingMessage);
-    }
+export function add(n:number, m:number):number {
+    return n + m;
 }
+
