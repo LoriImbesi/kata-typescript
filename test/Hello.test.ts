@@ -1,18 +1,13 @@
-import { HelloTypescript } from "../src/Hello";
+import { add } from "../src/Hello";
 
 const chai = require("chai");
 const expect = chai.expect;
 
 describe("Say hello", () => {
   it("should display message", () => {
-    (new HelloTypescript()).sayHello();
+    let result = add(1,2);
+    
+    expect(result).equal(3)
   });
 
-  it("test should be green", () => {
-    expect(true).to.be.true;
-  });
-
-  it("test should be red", () => {
-    expect(true).to.be.false;
-  });
 });
