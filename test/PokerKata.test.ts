@@ -26,6 +26,33 @@ describe("Parsing strings", () => {
 
   });
 
+
+  it("cube", () => {
+    let result = [1,2,3].map(num => num * num * num);
+
+    expect(result).to.deep.equal([1,8,27])
+  });
+
+  it("square", () => {
+    let squareNum = (num:number) => num * num
+    let result = [1,2,3].map(squareNum)
+
+    expect(result).to.deep.equal([1,4,9])
+  });
+
+  it("say hello", () => {
+    let helloInitial = (x:string) => ("Hello " + x[0])
+    let result = ["Steve", "Lori"].map(helloInitial);
+
+    expect(result).to.deep.equal(["Hello S", "Hello L"])
+  });
+
+  it("lower case names", () => {
+    let result = ["Steve", "Lori"].map(name => name.toLowerCase());
+
+    expect(result).to.deep.equal(["steve", "lori"])
+  });
+
   // =>    function   "big arrow"   lambda  
   it("can count length of names 2 ", () => {
     // string => string

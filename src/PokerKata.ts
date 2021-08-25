@@ -51,8 +51,8 @@ export function parseCard(card:string):Card {
 }
 
 // SEQUENCE ABSTRACTIONS
-// map     :: string[].map(string => Card) : Card[]
 // map     :: T[].map(T => A) : A[]
+// map     :: string[].map(string => Card) : Card[]
 // filter*
 // reduce/fold 
 export function parseCards(cardStrings:string[]):Card[] {
