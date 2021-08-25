@@ -58,3 +58,14 @@ export function parseCard(card:string):Card {
 export function parseCards(cardStrings:string[]):Card[] {
     return cardStrings.map(parseCard);
 }
+
+
+// typescript transpiler (nodejs) (build-ts)
+
+// test running
+// build-ts(typescript -> javascript)
+// nodejs(runs tests on generated javascript)
+
+// website
+// build-ts(typescript -> javascript)
+// browser(runs generated javascript)

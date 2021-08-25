@@ -26,6 +26,37 @@ describe("Parsing strings", () => {
 
   });
 
+  it("odds only with extra", () => {
+    let result = [1,2,3,4].filter(num => num % 2 !== 0).map(num => num + ":odd")
+
+    expect(result).to.deep.equal(["1:odd", "3:odd"])
+  });
+
+  it("steve only", () => {
+    let isSteve = (x:string) => x === "steve";
+
+    let result = ["steve", "steve", "lori"].filter(isSteve);
+
+    expect(result).to.deep.equal(["steve", "steve"])
+  });
+
+  it("evens only", () => {
+    let result = [1,2,3,4].filter(num => num % 2 === 0);
+
+    expect(result).to.deep.equal([2, 4])
+  });
+
+  it("odd or even", () => {
+    let result = [1,2,3,4].map(num => {
+      if (num%2 === 0) {
+        return num + ":even";
+      } else {
+        return num + ":odd"
+      }
+    });
+
+    expect(result).to.deep.equal(["1:odd", "2:even", "3:odd", "4:even"])
+  });
 
   it("cube", () => {
     let result = [1,2,3].map(num => num * num * num);
