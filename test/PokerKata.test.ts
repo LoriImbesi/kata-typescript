@@ -26,6 +26,17 @@ describe("Parsing strings", () => {
 
   });
 
+it ("cubes and filters odds", () => {
+  let result = [1,2,3,4,5].filter(num => num % 2 !== 0).map(num => num * num);
+  expect(result).to.deep.equal([1, 9, 25])
+});
+
+it ("square and return > 10", () => {
+  let result = [1,2,3,4,5].map(num => num * num).filter(num => num > 10);
+  expect(result).to.deep.equal([16, 25])
+});
+
+
   it("odds only with extra", () => {
     let result = [1,2,3,4].filter(num => num % 2 !== 0).map(num => num + ":odd")
 
