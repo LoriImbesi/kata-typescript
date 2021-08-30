@@ -59,7 +59,9 @@ export function parseCards(cardStrings:string[]):Card[] {
     return cardStrings.map(parseCard);
 }
 
-
+export function countFaces(cards){
+    
+}
 // typescript transpiler (nodejs) (build-ts)
 
 // test running
