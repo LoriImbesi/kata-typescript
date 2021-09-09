@@ -1,4 +1,4 @@
-import { Suit, Hand, parseCard, parseCards  } from "../src/PokerKata";
+import { Suit, Hand, parseCard, parseCards, countFaces, countSuits, countRads, loriMap, detectHand  } from "../src/PokerKata";
 
 const chai = require("chai");
 const expect = chai.expect;
@@ -29,30 +29,135 @@ describe("Parsing strings", () => {
   it("can parse face and suit for three cards", () => {
     let result = parseCards(["3H", "4D", "5D"]);
     
-    expect(result.suit).equal(Suit.HEARTS)
-    expect(result.face).equal(3)
-    expect(result.suit).equal(Suit.DIAMONDS)
-    expect(result.face).equal(4)
-    expect(result.suit).equal(Suit.DIAMONDS)
-    expect(result.face).equal(5)
+    expect(result[0].suit).equal(Suit.HEARTS)
+    expect(result[0].face).equal(3)
+    expect(result[1].suit).equal(Suit.DIAMONDS)
+    expect(result[1].face).equal(4)
+    expect(result[2].suit).equal(Suit.DIAMONDS)
+    expect(result[2].face).equal(5)
 
+  });
+
+  it("can detect two pair", () => {
+    let cards = [{suit:Suit.HEARTS, face:3},
+      {suit:Suit.SPADES, face:3},
+      {suit:Suit.DIAMONDS, face:5},
+      {suit:Suit.HEARTS, face:5},
+      {suit:Suit.HEARTS, face:4}
+    ]
+    let hand = detectHand(cards);
+
+    expect(hand).equal(Hand.TWO_PAIR)
+  });
+
+
+  it("can detect single pair", () => {
+    let cards = [{suit:Suit.HEARTS, face:3},
+      {suit:Suit.SPADES, face:3},
+      {suit:Suit.DIAMONDS, face:5},
+      {suit:Suit.HEARTS, face:8},
+      {suit:Suit.HEARTS, face:4}
+    ]
+    let hand = detectHand(cards);
+
+    expect(hand).equal(Hand.PAIR)
   });
 
   it("can count faces", () => {
-    let result = countFaces(cards);
-    let result = [3, 3, 3, 8, 4].reduce(val => (val === val ? val + 1 : val), 0)
-      cards = [Card(Suit.HEARTS, 3),
-      Card(Suit.SPADES, 3),
-      Card(Suit.DIAMONDS, 3),
-      Card(Suit.HEARTS, 8),
-      Card(Suit.HEARTS, 4)
+    let cards = [{suit:Suit.HEARTS, face:3},
+      {suit:Suit.SPADES, face:3},
+      {suit:Suit.DIAMONDS, face:4},
+      {suit:Suit.HEARTS, face:8},
+      {suit:Suit.HEARTS, face:4}
     ]
+    let result = countFaces(cards);
 
-    expect(result.countFaces(cards)).equal([]);
-    expect(result.)
-
-    expect(result)
+    expect(result).to.deep.equal({3: 2, 4: 2, 8: 1})
   });
+
+  it ("homemade map function", () => {
+    let r1 = loriMap([3, 8, 4], num => num + 2);
+    expect(r1).to.deep.equal([5, 10, 6])
+
+
+    let r2 = loriMap([1,2,3], num => num);
+    expect(r2).to.deep.equal([1,2,3])
+
+  });
+
+
+
+  it("can count rad levels", () => {
+    let readings = [{rads: 44},
+      {rads: 44},
+      {rads: 10}
+    ]
+    let result = countRads(readings);
+    // {key: value, key1: value2, key2:value2}
+    expect(result).to.deep.equal({44: 2, 10: 1})
+  });
+
+  it("can count suits", () => {
+    let cards = [{suit:Suit.HEARTS, face:3},
+      {suit:Suit.SPADES, face:3},
+      {suit:Suit.DIAMONDS, face:4},
+      {suit:Suit.HEARTS, face:8},
+      {suit:Suit.HEARTS, face:4}
+    ]
+    let result = countSuits(cards);
+    // {key: value, key1: value2, key2:value2}
+    expect(result).to.deep.equal({[Suit.SPADES]: 1, [Suit.DIAMONDS]: 1, [Suit.HEARTS]: 3})
+  });
+
+  it ("counts by key", () => {
+    // T[] -> ((A, T) -> A) -> A
+
+    let r1 = [3, 8, 4].map(num => num + 2);
+    expect(r1).to.deep.equal([5, 10, 6])
+
+
+    let r4 = [3, 8, 4, 5].filter(num => num %2 !== 0).map(num => "test:" + num)
+    expect(r4).to.deep.equal(["test:3", "test:5"])
+
+    let r = [3, 3, 3, 8, 4].reduce((total,next) => total+next, 0)
+    expect(r).equal(21)
+
+    let r2 = ["Steve", "Lori"].reduce((total,next) => total+","+next, "")
+    expect(r2).equal(",Steve,Lori")
+
+    let r3 = ['Steve', 'Lori', 'Steve'].reduce((counts,name) => { 
+      if (counts[name] > 0) {
+        counts[name] += 1 // {'Steve': 2, 'Lori': 1}
+      } else {
+        counts[name] = 1 
+      }
+      return counts; 
+    }, {})
+    expect(r3).to.deep.equal({'Steve': 2, 'Lori': 1})
+  });
+
+ it ("extracts names and concats", () => {
+   // array creation              |  ['horse'] 
+   // array indexing              |  array[0]
+   // array indexing by variable  |  array[index]
+   // array setting               |  array[0] = 'steve'
+
+   // object creation             |  { name: 'horse'}
+   // object creation by variable |  { [keyVariable]: 'horse'}
+   // object indexing             |  obj.name
+   // object indexing by variable |  obj[keyVariable]
+   // object setting              |  obj.name = 'steve'
+   let input = [{first: "Steve", last: "Shogren"},{first: "Lori", last: "Imbesi"}]
+   let result = input.reduce((listOfNames, person) => {
+     return listOfNames + person.first + " " + person.last + ", ";
+   }, "")
+
+   let expected = "Steve Shogren, Lori Imbesi, "
+   expect(result).to.deep.equal(expected)
+ });
+
+});
+
 
 // it ("cubes and filters odds", () => {
 //   let result = [1,2,3,4,5].filter(num => num % 2 !== 0).map(num => num * num);
@@ -166,8 +271,8 @@ describe("Parsing strings", () => {
 
 
 
-});
-function Card(HEARTS: Suit, arg1: number): any {
-  throw new Error("Function not implemented.");
-}
+
+// function Card(HEARTS: Suit, arg1: number): any {
+//   throw new Error("Function not implemented.");
+// }
 

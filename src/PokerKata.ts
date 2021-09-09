@@ -8,6 +8,7 @@ export enum Suit {
 }
 
 export enum Hand {
+    HIGH_CARD = 0,
     PAIR = 1,
     TWO_PAIR = 2,
     THREE_OF_A_KIND = 3,
@@ -17,6 +18,10 @@ export enum Hand {
     STRAIGHT = 7,
     STRAIGHT_FLUSH = 8,
     ROYAL_FLUSH = 9
+}
+
+export interface RadiationReading {
+    rads:number
 }
 
 export interface Card {
@@ -59,9 +64,56 @@ export function parseCards(cardStrings:string[]):Card[] {
     return cardStrings.map(parseCard);
 }
 
-export function countFaces(cards){
-    
+export function detectHand(cards:Card[]) :Hand {
+    let counts = countFaces(cards)
+    let countOfPairs = Object.values(counts)
+            .filter(num => num == 2)
+            .length
+    if (countOfPairs == 2) {
+        return Hand.TWO_PAIR
+    } else if (countOfPairs == 1) {
+        return Hand.PAIR
+    } else {
+        return Hand.HIGH_CARD
+    }
 }
+
+export function countFaces(cards:Card[]) :any  {
+    return countBy(cards, card => card.face );
+ }
+
+ export function countSuits(cards:Card[]) :any  {
+    return countBy(cards, card => card.suit );
+ }
+
+ export function countRads(readings:RadiationReading[]) :any {
+    return countBy(readings, reading => reading.rads)
+ }
+
+ export function loriMap2(numbers:number[], mapFn: (num:number)=>number) :number[] {
+     let output = [];
+     for (let x = 0; x < numbers.length; x++) {
+         output.push(mapFn(numbers[x]));
+     }
+     return output
+ }
+
+ export function loriMap(numbers:number[], mapFn: (num:number)=>number) :number[] {
+     return numbers.map(mapFn)
+ }
+
+ export function countBy(items:any[], keyFn: (item:any)=>any ) :any {
+    let values:number[] = items.map(keyFn)
+    return values.reduce((counts:any, value) => {
+        if (counts[value] > 0) {
+            counts[value] += 1 
+        } else {
+            counts[value] = 1
+        }
+        return counts;
+    }, {});
+ }
+
 // typescript transpiler (nodejs) (build-ts)
 
 // test running
